@@ -1,0 +1,13 @@
+[tool.poetry]
+name = "celery-worker"
+version = "0.1.0"
+description = "Celery worker for task processing"
+authors = ["Your Name <you@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+celery = {extras = ["redis"], version = "^5.3.1"}
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
