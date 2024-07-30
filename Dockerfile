@@ -34,4 +34,4 @@ USER celery-user
 EXPOSE 5555
 
 # Start Celery worker and Flower
-CMD celery -A tasks worker --loglevel=info & celery -A tasks flower --port=5555 --address=0.0.0.0
+CMD celery -A tasks worker --loglevel=info --concurrency=10 & celery -A tasks flower --port=5555 --address=0.0.0.0 --max-workers=2
