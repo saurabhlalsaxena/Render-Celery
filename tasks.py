@@ -6,7 +6,7 @@ from kombu.connection import Connection
 REDIS_URL = os.getenv('REDIS_URL', 'redis://redis:6379/0')
 
 # Connection pool settings
-pool_limit = 100  # Adjust this value based on your needs
+pool_limit = 10  # Adjust this value based on your needs
 
 celery = Celery('tasks', broker=REDIS_URL, backend=REDIS_URL)
 celery.conf.broker_connection_retry_on_startup = True
