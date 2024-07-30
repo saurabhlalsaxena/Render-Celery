@@ -16,26 +16,22 @@ COPY ./pyproject.toml ./poetry.lock* ./
 # Install dependencies without creating a virtual environment
 RUN poetry install --no-interaction --no-ansi --no-root
 
-# Copy the tasks.py file and start script
-COPY tasks.py start.sh ./
+# Copy the tasks.py file
+COPY tasks.py ./
 
 RUN poetry install --no-interaction --no-ansi
-
-# Install Celery
-RUN pip install --no-cache-dir celery[redis]
 
 # Create a non-root user
 RUN useradd -m celery-user
 
-# Change ownership of the working directory and make start.sh executable
-RUN chown -R celery-user:celery-user /code && \
-    chmod +x /code/start.sh
+# Change ownership of the working directory
+RUN chown -R celery-user:celery-user /code
 
 # Switch to the non-root user
 USER celery-user
 
-# Expose the port the app runs on
-EXPOSE 8000
+# Expose the port for Flower
+EXPOSE 5555
 
-# Use the start script as the entry point
-CMD ["/code/start.sh"]
+# Start Celery worker and Flower
+CMD celery -A tasks worker --loglevel=info & celery -A tasks flower --port=5555 --address=0.0.0.0
