@@ -23,8 +23,7 @@ COPY ./pyproject.toml ./poetry.lock* ./
 RUN poetry install --no-interaction --no-ansi --no-root
 
 # Copy the tasks.py file and any other necessary files
-COPY tasks.py ./
-COPY .env ./ 
+COPY tasks.py ./ 
 
 # Install project
 RUN poetry install --no-interaction --no-ansi
