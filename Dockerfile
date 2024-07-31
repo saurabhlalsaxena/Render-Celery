@@ -42,4 +42,4 @@ EXPOSE 5555
 
 # Start Celery worker and Flower
 CMD celery -A tasks worker --loglevel=info -E & \
-    celery -A tasks flower --port=5555 --address=0.0.0.0
+    celery -A tasks flower --logging=DEBUG --port=5555 --address=0.0.0.0
