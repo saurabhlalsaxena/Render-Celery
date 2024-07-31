@@ -33,6 +33,8 @@ celery.conf.update(
     task_acks_late=True,
     task_reject_on_worker_lost=True,
     task_default_rate_limit='10/m',
+    worker_send_task_events=True,  # Enable sending task events
+    task_send_sent_event=True,     # Enable sending task sent events
     flower_port=5555,
 )
 

@@ -1,6 +1,12 @@
 # Use a more recent and slim Python image
 FROM python:3.11-slim-bullseye
 
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    libc6-dev \
+    && rm -rf /var/lib/apt/lists/*
+
 # Install Poetry
 RUN pip install poetry==1.6.1
 
@@ -16,9 +22,11 @@ COPY ./pyproject.toml ./poetry.lock* ./
 # Install dependencies without creating a virtual environment
 RUN poetry install --no-interaction --no-ansi --no-root
 
-# Copy the tasks.py file
+# Copy the tasks.py file and any other necessary files
 COPY tasks.py ./
+COPY .env ./ 
 
+# Install project
 RUN poetry install --no-interaction --no-ansi
 
 # Create a non-root user
@@ -34,4 +42,5 @@ USER celery-user
 EXPOSE 5555
 
 # Start Celery worker and Flower
-CMD celery -A tasks worker --loglevel=info --concurrency=10 & celery -A tasks flower --port=5555 --address=0.0.0.0 --max-workers=2
+CMD celery -A tasks worker --loglevel=info -E & \
+    celery -A tasks flower --port=5555 --address=0.0.0.0
